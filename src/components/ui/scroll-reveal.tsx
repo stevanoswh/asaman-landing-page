@@ -8,8 +8,9 @@ import {
   useRef,
   useState,
 } from "react";
+import type { JSX as ReactJSX } from "react";
 
-type ElementTag = keyof JSX.IntrinsicElements;
+type ElementTag = keyof ReactJSX.IntrinsicElements;
 
 export type ScrollRevealProps<T extends ElementTag = "div"> = {
   as?: T;
