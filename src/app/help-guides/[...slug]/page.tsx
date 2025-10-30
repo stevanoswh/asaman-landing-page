@@ -12,6 +12,7 @@ import ScrollReveal from "@/components/ui/scroll-reveal";
 export const dynamic = "force-static";
 export const revalidate = false;
 
+/* ----------------------------- Type guards ------------------------------ */
 type FolderNode = Extract<DocNode, { type: "folder" }>;
 type DocumentNode = Extract<DocNode, { type: "doc" }>;
 
@@ -23,6 +24,7 @@ function isDocument(node: DocNode): node is DocumentNode {
   return node.type === "doc";
 }
 
+/* --------------------------- Static params (SSG) ------------------------ */
 type PageParams = { slug: string[] };
 
 export async function generateStaticParams(): Promise<PageParams[]> {
@@ -33,19 +35,17 @@ export async function generateStaticParams(): Promise<PageParams[]> {
     for (const node of nodes) {
       if (isDocument(node) && node.published) {
         slugs.push(node.slug);
-        continue;
-      }
-
-      if (isFolder(node)) {
+      } else if (isFolder(node)) {
         walk(node.children);
       }
     }
   };
 
   walk(tree);
-  return slugs.map((slug) => ({ slug: slug.split("/") }));
+  return slugs.map((s) => ({ slug: s.split("/") }));
 }
 
+/* --------------------------- Utilities ---------------------------------- */
 function flattenDocs(
   nodes: DocNode[],
   acc: Array<{ slug: string; title: string }> = []
@@ -53,18 +53,14 @@ function flattenDocs(
   for (const node of nodes) {
     if (isDocument(node) && node.published) {
       acc.push({ slug: node.slug, title: node.title });
-      continue;
-    }
-
-    if (isFolder(node)) {
+    } else if (isFolder(node)) {
       flattenDocs(node.children, acc);
     }
   }
-
   return acc;
 }
 
-// Find path (ancestors -> ... -> doc)
+// Find path (ancestors … -> doc)
 function findPath(
   nodes: DocNode[],
   targetSlug: string,
@@ -74,20 +70,23 @@ function findPath(
     if (isDocument(node) && node.slug === targetSlug) {
       return [...path, node];
     }
-
     if (isFolder(node)) {
-      const result = findPath(node.children, targetSlug, [...path, node]);
-      if (result) {
-        return result;
-      }
+      const res = findPath(node.children, targetSlug, [...path, node]);
+      if (res) return res;
     }
   }
-
   return null;
 }
 
-export default function HelpGuidesArticlePage({ params }: { params: PageParams }) {
-  const slug = params.slug.join("/");
+/* ------------------------------ Page (Next 15: async params) ------------ */
+export default async function HelpGuidesArticlePage({
+  params,
+}: {
+  params: Promise<PageParams>;
+}) {
+  const { slug: slugArr } = await params; // <-- await Promise in Next 15
+  const slug = slugArr.join("/");
+
   const tree = buildTree();
   const doc = getDocBySlug(slug);
 
@@ -115,7 +114,7 @@ export default function HelpGuidesArticlePage({ params }: { params: PageParams }
           </aside>
 
           <div>
-            {/* ⬇️ Section title from the nav (e.g., “FAQs”) */}
+            {/* Section title from nav (e.g., “FAQs”) */}
             {sectionTitle && (
               <div className="mb-4">
                 <h2 className="text-3xl font-bold text-slate-900">{sectionTitle}</h2>
@@ -127,7 +126,7 @@ export default function HelpGuidesArticlePage({ params }: { params: PageParams }
               <>
                 <HelpArticle title={doc.title} markdown={doc.content} />
 
-                {/* Prev / Next (optional; keep if you implemented it) */}
+                {/* Prev / Next */}
                 <nav className="mt-6 flex items-center justify-between">
                   {prev ? (
                     <Link
