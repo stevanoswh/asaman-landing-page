@@ -1,0 +1,18 @@
+{
+  "title": "FCFS Allocation",
+  "sort": 5,
+  "items": {
+    "1-find-activities-in-fcfs": {
+      "title": "1. How to find Activities in First Come First Serve (FCFS) Allocation?",
+      "sort": 1
+    },
+    "2-check-activities-enrolments-in-fcfs": {
+      "title": "2. How to check the Activities Enrolments in FCFS?",
+      "sort": 2
+    },
+    "3-view-activities-in-container": {
+      "title": "3. How can I view Activities in a Container?",
+      "sort": 3
+    }
+  }
+}

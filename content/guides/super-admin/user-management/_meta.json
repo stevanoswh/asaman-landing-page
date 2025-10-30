@@ -1,0 +1,50 @@
+{
+  "title": "User Management",
+  "sort": 2,
+  "items": {
+    "1-add-users-and-view-details": {
+      "title": "1. How to add users to my account and view their details?",
+      "sort": 1
+    },
+    "2-add-a-user": {
+      "title": "2. How can I add a user to my account?",
+      "sort": 2
+    },
+    "3-add-parent-user": {
+      "title": "3. How can I add a Parent user to my account?",
+      "sort": 3
+    },
+    "4-link-or-add-student-when-adding-parent": {
+      "title": "4. Can I link or add a Student user while adding its Parent?",
+      "sort": 4
+    },
+    "5-view-parent-profile": {
+      "title": "5. How can I view the profile of a Parent user?",
+      "sort": 5
+    },
+    "6-send-activation-email-to-parent": {
+      "title": "6. How can I send an Activation Email to a Parent user?",
+      "sort": 6
+    },
+    "7-add-student-user": {
+      "title": "7. How can I add a Student user to my account?",
+      "sort": 7
+    },
+    "8-view-student-profile": {
+      "title": "8. How can I view the profile of a Student user?",
+      "sort": 8
+    },
+    "9-add-staff-user": {
+      "title": "9. How can I add a Staff user to my account?",
+      "sort": 9
+    },
+    "10-view-staff-profile": {
+      "title": "10. How can I view the profile of a Staff user?",
+      "sort": 10
+    },
+    "11-add-external-provider-user": {
+      "title": "11. How can I add an External Provider user to my account?",
+      "sort": 11
+    }
+  }
+}

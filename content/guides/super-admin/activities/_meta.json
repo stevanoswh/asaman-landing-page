@@ -1,0 +1,26 @@
+{
+  "title": "Activities",
+  "sort": 3,
+  "items": {
+    "1-access-activity-containers": {
+      "title": "1. How can I access Activity Containers in my ASAMAN account?",
+      "sort": 1
+    },
+    "2-random-allocation-of-activities": {
+      "title": "2. How to do Random Allocation of Activities in my ASAMAN account?",
+      "sort": 2
+    },
+    "3-reset-password-for-asaman-account": {
+      "title": "3. How to reset the password for my ASAMAN account?",
+      "sort": 3
+    },
+    "4-create-new-activity-in-container": {
+      "title": "4. How can I create a new Activity in a Container?",
+      "sort": 4
+    },
+    "5-setup-availability-of-activity-in-container": {
+      "title": "5. How can I set up the availability of an Activity in an Activity Container?",
+      "sort": 5
+    }
+  }
+}

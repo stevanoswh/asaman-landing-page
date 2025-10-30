@@ -1,0 +1,16 @@
+{
+  "title": "Super Admin Guides",
+  "sort": 1,
+  "items": {
+    "overview":         { "title": "Overview",           "sort": 0 },
+    "faqs":             { "title": "FAQ's",              "sort": 1 },
+    "user-management":  { "title": "User Management",    "sort": 2 },
+    "activities":       { "title": "Activities",         "sort": 3 },
+    "random-allocation":{ "title": "Random Allocation",  "sort": 4 },
+    "fcfs-allocation":  { "title": "FCFS Allocation",    "sort": 5 },
+    "events":           { "title": "Events",             "sort": 6 },
+    "attendance":       { "title": "Attendance",         "sort": 7 },
+    "reporting":        { "title": "Reporting",          "sort": 8 },
+    "communication":    { "title": "Communication",      "sort": 9 }
+  }
+}

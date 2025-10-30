@@ -1,0 +1,30 @@
+{
+  "title": "Random Allocation",
+  "sort": 4,
+  "items": {
+    "1-student-selection-random-allocation": {
+      "title": "1. How to do Student Selection in Random Allocation in ASAMAN?",
+      "sort": 1
+    },
+    "2-random-allocation-of-activities": {
+      "title": "2. How to do Random Allocation of Activities in my ASAMAN account?",
+      "sort": 2
+    },
+    "3-check-confirmed-activities-for-container": {
+      "title": "3. How to check the Confirmed Activities for an Activity Container in Random Allocation?",
+      "sort": 3
+    },
+    "4-check-confirmed-allocations": {
+      "title": "4. How to check the Confirmed Allocations in Random Allocation?",
+      "sort": 4
+    },
+    "5-check-partial-allocations-for-container": {
+      "title": "5. How to check Partial Allocations for an Activity Container in Random Allocation?",
+      "sort": 5
+    },
+    "6-check-unallocated-activities-for-container": {
+      "title": "6. How do you check Unallocated Activities for an Activity Container in Random Allocation?",
+      "sort": 6
+    }
+  }
+}

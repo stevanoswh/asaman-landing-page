@@ -1,0 +1,8 @@
+{
+  "items": {
+    "super-admin":       { "title": "Super Admin Guides",       "sort": 1 },
+    "parent":            { "title": "Parent Guide",             "sort": 2 },
+    "staff":             { "title": "Staff Guide",              "sort": 3 },
+    "external-provider": { "title": "External Provider Guide",  "sort": 4 }
+  }
+}
