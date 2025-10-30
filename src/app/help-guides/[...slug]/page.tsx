@@ -23,7 +23,9 @@ function isDocument(node: DocNode): node is DocumentNode {
   return node.type === "doc";
 }
 
-export async function generateStaticParams() {
+type PageParams = { slug: string[] };
+
+export async function generateStaticParams(): Promise<PageParams[]> {
   const tree = buildTree();
   const slugs: string[] = [];
 
@@ -84,7 +86,7 @@ function findPath(
   return null;
 }
 
-export default function HelpGuidesArticlePage({ params }: { params: { slug: string[] } }) {
+export default function HelpGuidesArticlePage({ params }: { params: PageParams }) {
   const slug = params.slug.join("/");
   const tree = buildTree();
   const doc = getDocBySlug(slug);
