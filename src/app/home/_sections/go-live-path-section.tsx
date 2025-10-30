@@ -57,9 +57,9 @@ export default function GoLivePathSection() {
         />
 
         <ol className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {steps.map((step, index) => (
+          {steps.map((step) => (
             <li key={step.week} className="relative">
-              <StepCard step={step} index={index} isLast={index === steps.length - 1} />
+              <StepCard step={step} />
             </li>
           ))}
         </ol>
@@ -76,7 +76,7 @@ type Step = {
   href?: string;
 };
 
-function StepCard({ step, index, isLast }: { step: Step; index: number; isLast: boolean }) {
+function StepCard({ step }: { step: Step }) {
   return (
     <div className="relative flex h-full flex-col justify-between rounded-3xl bg-white p-6 text-slate-900 shadow-xl ring-1 ring-slate-200">
 

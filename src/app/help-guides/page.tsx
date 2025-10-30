@@ -3,6 +3,7 @@ import HelpCenterHero from "./_sections/hero-section";
 import ContactSection from "./_sections/contact-section";
 
 import { buildTree, findFirstDoc, getDocBySlug } from "@/lib/guides";
+import type { DocNode } from "@/lib/guides";
 import HelpHeader from "./_components/HelpHeader";
 import HelpNav from "./_components/HelpNav";
 import HelpArticle from "./_components/HelpArticle";
@@ -11,14 +12,35 @@ export const dynamic = "force-static";
 export const revalidate = false;
 
 // helper to find the nearest parent folder title (for the section heading)
-function findPath(nodes: any[], targetSlug: string, path: any[] = []): any[] | null {
-  for (const n of nodes) {
-    if (n.type === "doc" && n.slug === targetSlug) return [...path, n];
-    if (n.type === "folder") {
-      const res = findPath(n.children || [], targetSlug, [...path, n]);
-      if (res) return res;
+type FolderNode = Extract<DocNode, { type: "folder" }>;
+type DocumentNode = Extract<DocNode, { type: "doc" }>;
+
+function isFolder(node: DocNode): node is FolderNode {
+  return node.type === "folder";
+}
+
+function isDocument(node: DocNode): node is DocumentNode {
+  return node.type === "doc";
+}
+
+function findPath(
+  nodes: DocNode[],
+  targetSlug: string,
+  path: DocNode[] = []
+): DocNode[] | null {
+  for (const node of nodes) {
+    if (isDocument(node) && node.slug === targetSlug) {
+      return [...path, node];
+    }
+
+    if (isFolder(node)) {
+      const result = findPath(node.children, targetSlug, [...path, node]);
+      if (result) {
+        return result;
+      }
     }
   }
+
   return null;
 }
 

@@ -1,5 +1,6 @@
 // app/help-guides/[...slug]/page.tsx
 import { buildTree, getDocBySlug } from "@/lib/guides";
+import type { DocNode } from "@/lib/guides";
 import HelpCenterHero from "../_sections/hero-section";
 import ContactSection from "../_sections/contact-section";
 import HelpHeader from "../_components/HelpHeader";
@@ -11,36 +12,75 @@ import ScrollReveal from "@/components/ui/scroll-reveal";
 export const dynamic = "force-static";
 export const revalidate = false;
 
+type FolderNode = Extract<DocNode, { type: "folder" }>;
+type DocumentNode = Extract<DocNode, { type: "doc" }>;
+
+function isFolder(node: DocNode): node is FolderNode {
+  return node.type === "folder";
+}
+
+function isDocument(node: DocNode): node is DocumentNode {
+  return node.type === "doc";
+}
+
 export async function generateStaticParams() {
   const tree = buildTree();
   const slugs: string[] = [];
-  const walk = (nodes: any[]) => {
-    for (const n of nodes) {
-      if (n.type === "doc" && n.published) slugs.push(n.slug);
-      if (n.type === "folder") walk(n.children);
+
+  const walk = (nodes: DocNode[]) => {
+    for (const node of nodes) {
+      if (isDocument(node) && node.published) {
+        slugs.push(node.slug);
+        continue;
+      }
+
+      if (isFolder(node)) {
+        walk(node.children);
+      }
     }
   };
+
   walk(tree);
-  return slugs.map((s) => ({ slug: s.split("/") }));
+  return slugs.map((slug) => ({ slug: slug.split("/") }));
 }
 
-function flattenDocs(nodes: any[], acc: { slug: string; title: string }[] = []) {
-  for (const n of nodes) {
-    if (n.type === "doc" && n.published) acc.push({ slug: n.slug, title: n.title });
-    if (n.type === "folder") flattenDocs(n.children || [], acc);
+function flattenDocs(
+  nodes: DocNode[],
+  acc: Array<{ slug: string; title: string }> = []
+): Array<{ slug: string; title: string }> {
+  for (const node of nodes) {
+    if (isDocument(node) && node.published) {
+      acc.push({ slug: node.slug, title: node.title });
+      continue;
+    }
+
+    if (isFolder(node)) {
+      flattenDocs(node.children, acc);
+    }
   }
+
   return acc;
 }
 
 // Find path (ancestors -> ... -> doc)
-function findPath(nodes: any[], targetSlug: string, path: any[] = []): any[] | null {
-  for (const n of nodes) {
-    if (n.type === "doc" && n.slug === targetSlug) return [...path, n];
-    if (n.type === "folder") {
-      const res = findPath(n.children || [], targetSlug, [...path, n]);
-      if (res) return res;
+function findPath(
+  nodes: DocNode[],
+  targetSlug: string,
+  path: DocNode[] = []
+): DocNode[] | null {
+  for (const node of nodes) {
+    if (isDocument(node) && node.slug === targetSlug) {
+      return [...path, node];
+    }
+
+    if (isFolder(node)) {
+      const result = findPath(node.children, targetSlug, [...path, node]);
+      if (result) {
+        return result;
+      }
     }
   }
+
   return null;
 }
 

@@ -18,7 +18,7 @@ function usePersistentOpen(key: string, defaultOpen: boolean) {
         setOpen(raw === "1");
       }
     } catch {}
-  }, [storageKey]);
+  }, [storageKey, defaultOpen]);
 
   // Persist whenever it changes
   useEffect(() => {
@@ -62,41 +62,45 @@ export default function HelpNav({
 }
 
 
-function Node({
-  node,
-  activeSlug,
-  basePath,
-  depth,
-}: {
+type NodeProps = {
   node: DocNode;
   activeSlug: string;
   basePath: string;
   depth: number;
-}) {
-  if (node.type === "doc") {
-    const href = `${basePath}/${node.slug}`;
-    const active = node.slug === activeSlug;
+};
 
-    return (
-      <li>
-        <Link
-          href={href}
-          prefetch
-          scroll={false}
-          className={`block rounded-lg px-3 py-2 text-sm ${
-            active
-              ? "bg-sky-50 text-sky-700 ring-1 ring-sky-200"
-              : "hover:bg-slate-50 text-slate-700"
-          } ${depth > 0 ? "ml-3" : ""}`}
-          aria-current={active ? "page" : undefined}
-        >
-          {node.title}
-        </Link>
-      </li>
-    );
+function Node(props: NodeProps) {
+  if (props.node.type === "doc") {
+    return <DocNodeItem {...props} node={props.node} />;
   }
 
-  // FOLDER
+  return <FolderNodeItem {...props} node={props.node} />;
+}
+
+function DocNodeItem({ node, activeSlug, basePath, depth }: NodeProps & { node: Extract<DocNode, { type: "doc" }> }) {
+  const href = `${basePath}/${node.slug}`;
+  const active = node.slug === activeSlug;
+
+  return (
+    <li>
+      <Link
+        href={href}
+        prefetch
+        scroll={false}
+        className={`block rounded-lg px-3 py-2 text-sm ${
+          active
+            ? "bg-sky-50 text-sky-700 ring-1 ring-sky-200"
+            : "hover:bg-slate-50 text-slate-700"
+        } ${depth > 0 ? "ml-3" : ""}`}
+        aria-current={active ? "page" : undefined}
+      >
+        {node.title}
+      </Link>
+    </li>
+  );
+}
+
+function FolderNodeItem({ node, activeSlug, basePath, depth }: NodeProps & { node: Extract<DocNode, { type: "folder" }> }) {
   const containsActive = useMemo(
     () => containsSlug(node, activeSlug),
     [node, activeSlug]
@@ -111,9 +115,9 @@ function Node({
         <button
           type="button"
           data-help-folder={node.slug}
-          onClick={() => setOpen((v) => !v)}
+          onClick={() => setOpen((value) => !value)}
           className="flex w-full items-center justify-between px-4 py-3 text-left text-sm font-semibold text-slate-800"
-          aria-expanded={open}                 
+          aria-expanded={open}
           aria-controls={controlsId}
         >
           <span className="flex items-center gap-2">
@@ -126,7 +130,7 @@ function Node({
         <ul
           id={controlsId}
           role="list"
-          className={`${open ? "block" : "hidden"} border-t border-slate-200 p-2 space-y-2`}
+          className={`${open ? "block" : "hidden"} space-y-2 border-t border-slate-200 p-2`}
         >
           {node.children.map((child) => (
             <Node
@@ -143,8 +147,10 @@ function Node({
   );
 }
 
-
 function containsSlug(node: DocNode, slug: string): boolean {
-  if (node.type === "doc") return node.slug === slug;
-  return node.children.some((c) => containsSlug(c, slug));
+  if (node.type === "doc") {
+    return node.slug === slug;
+  }
+
+  return node.children.some((child) => containsSlug(child, slug));
 }
